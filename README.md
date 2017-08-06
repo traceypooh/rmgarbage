@@ -4,11 +4,11 @@
 - *Usage*:  `echo 'hai wHIRLD .,|-yxz' | ./rmgarbage.pl`
 
 
-_A Perl implementation of rmgarbage as described in 'Automatic Removal of
+# A Perl implementation of rmgarbage as described in 'Automatic Removal of
 "Garbage Strings" in OCR Text: An Implementation' by Taghva, Nartker, Condit,
-and Borsack._
+and Borsack.
 
-# Copyright (C) 2011 Isaac Wilcox
+## Copyright (C) 2011 Isaac Wilcox
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

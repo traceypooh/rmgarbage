@@ -4,9 +4,7 @@
 - *Usage*:  `echo 'hai wHIRLD .,|-yxz' | ./rmgarbage.pl`
 
 
-# A Perl implementation of rmgarbage as described in 'Automatic Removal of
-"Garbage Strings" in OCR Text: An Implementation' by Taghva, Nartker, Condit,
-and Borsack.
+# A Perl implementation of rmgarbage as described in 'Automatic Removal of "Garbage Strings" in OCR Text: An Implementation' by Taghva, Nartker, Condit, and Borsack.
 
 ## Copyright (C) 2011 Isaac Wilcox
 

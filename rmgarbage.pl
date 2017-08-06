@@ -3,65 +3,32 @@
 # An implementation of "Automatic Removal of 'Garbage Strings' in OCR Text" by
 # TAGHVA et al. at the ISRI.
 #
-# Usage:
-#  $0 {path-to-hOCR-HTML}
+# Only UTF-8 is supported.
 #
-# Only Tesseract's variant of hOCR is currently supported (plain text isn't!).
-# Only UTF-8 encoded HTML is supported.
-#
-# Writes the same hOCR minus words deemed garbage to standard output.
+# Reads text or file from STDIN.
+# Writes the same text minus words deemed garbage to standard output.
 #
 use strict;
 use warnings;
 use English;
 
-use Encode;
-
+binmode(STDIN,  ":utf8");
+binmode(STDOUT, ":utf8");
 binmode(STDERR, ":utf8");
 
-use HTML::TreeBuilder::XPath;
-my $tree = HTML::TreeBuilder::XPath->new;
-
-open(my $HTML_file, "<:utf8", $ARGV[0]) or die("couldn't open $ARGV[0]: $OS_ERROR");
-open(my $exceptions_file, "<:utf8", $ARGV[1]) or die("couldn't open $ARGV[1]: $OS_ERROR");
-$tree->parse_file($HTML_file);
-
-my $exceptions = [];
-while (<$exceptions_file>) {
+while (<>) {
     chomp();
-    next if /^\s*#/;
-    push(@$exceptions, qr/$_/);
+    next unless m/\S/;
+    foreach my $word (split(/\s+/)) {
+        if (isgarbage($word)) {
+            print STDERR "\t[discarded because " . isgarbage($word) . ": L=" . length($word) . " $word]\n";
+        } else {
+            print "$word ";
+        }
+    }
+    print "\n";
 }
 
-WORD: foreach my $word ($tree->findnodes('//span[@class="ocrx_word"]')) {
-    my $num_children = scalar($word->content_list());
-    if ($num_children > 1) {
-        print STDERR "\tmulti-content: " . $word->as_HTML();
-        next;
-    }
-    # FIXME: outside our remit, really, but: remove empty words
-    if ($num_children == 0) {
-        $word->delete();
-        next;
-    }
-
-    my $content = ($word->content_list())[0];
-    if (ref($content)) {
-        $content = $content->as_text();
-    }
-    foreach my $exception (@$exceptions) {
-        next WORD if $content =~ /$exception/;
-    }
-    if (isgarbage($content)) {
-        # FIXME: should get parent, check it's a ocrx_word with $word as the
-        # only kid, and delete that -- otherwise there's a dangling reference
-        # in hOCR terms because the id= won't exist.
-        $word->delete();
-        print STDERR "\t[discarded because " . isgarbage($content) . ": L=" . length($content) . " $content]\n";
-    }
-}
-
-print $tree->as_HTML(undef, "    ", {});
 
 sub isgarbage {
     my $string = shift();
@@ -69,7 +36,7 @@ sub isgarbage {
 
     # Rule 'L': "If a string is longer than 40 characters, it is garbage"
     if (length($string) > 40) {
-        return 'L'; 
+        return 'L';
     }
 
     # Rule 'A': "If a string's ratio of alphanumeric characters to total

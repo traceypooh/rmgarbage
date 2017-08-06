@@ -1,14 +1,14 @@
 # Tracey Jaquith altered 2017 to:
 - altered to simply read any text from STDIN (no longer tesseract HOCR specific)
 - set exe bit on script
-- Usage:  echo 'hai wHIRLD .,|-yxz' | ./rmgarbage.pl
+- *Usage*:  `echo 'hai wHIRLD .,|-yxz' | ./rmgarbage.pl`
 
 
-A Perl implementation of rmgarbage as described in 'Automatic Removal of
+_A Perl implementation of rmgarbage as described in 'Automatic Removal of
 "Garbage Strings" in OCR Text: An Implementation' by Taghva, Nartker, Condit,
-and Borsack.
+and Borsack._
 
-Copyright (C) 2011 Isaac Wilcox
+# Copyright (C) 2011 Isaac Wilcox
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
